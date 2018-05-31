@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "687837190900",
+    "firebase_url": "https://collegue-29148.firebaseio.com",
+    "project_id": "collegue-29148",
+    "storage_bucket": "collegue-29148.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687837190900:android:3b70d2cfb02afd5d",
+        "android_client_info": {
+          "package_name": "com.msf.collegue"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687837190900-u5jk03o5jk960kpjrtqnahgkant4ikv7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.msf.collegue",
+            "certificate_hash": "7f28dfd419b731608d53a828e745392de2f4ad0d"
+          }
+        },
+        {
+          "client_id": "687837190900-5qg1754c4v2itsj9pg7je6pgbrc4vu5c.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "687837190900-5qg1754c4v2itsj9pg7je6pgbrc4vu5c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuiwKW25p6_gAIz1GlCu0ZOonno83GoQ8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687837190900-5qg1754c4v2itsj9pg7je6pgbrc4vu5c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
