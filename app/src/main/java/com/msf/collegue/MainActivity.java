@@ -43,11 +43,26 @@ public class MainActivity extends AppCompatActivity implements
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
        // ButterKnife.bind(this);
 
+
          fragmentManager = getSupportFragmentManager();
          fragmentTransaction = fragmentManager.beginTransaction();
 
+         if (firebaseAuth  == null)
+         {
        mLoginFragment = new LoginFragment();
-        fragmentTransaction.add(R.id.root_layout, mLoginFragment).commitNow();
+        fragmentTransaction.add(R.id.root_layout, mLoginFragment).commitNow();}
+        else {
+             FirebaseUser user = firebaseAuth.getCurrentUser();
+             mAccountSetupFragment = new AccountSetupFragment();
+             Bundle b = new Bundle();
+             b.putString("name",user.getDisplayName());
+             b.putString("email",user.getEmail());
+             b.putString("DPurl", String.valueOf(user.getPhotoUrl()));
+
+             mAccountSetupFragment.setArguments(b);
+             fragmentTransaction = fragmentManager.beginTransaction();
+             fragmentTransaction.add(R.id.root_layout,mAccountSetupFragment).addToBackStack(null).commitNow();
+         }
 
 
 

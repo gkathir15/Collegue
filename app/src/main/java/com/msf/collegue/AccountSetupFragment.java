@@ -40,11 +40,11 @@ public class AccountSetupFragment extends Fragment {
         super.setArguments(args);
 
 
-        args.getString("name");
-        args.getString("email");
-        args.getString("phone");
-        args.getString("DPurl");
-        args.getString("designation");
+       mName= args.getString("name");
+        mEmail=args.getString("email");
+        mPhoneNo=args.getString("phone");
+        mDpImageURL=args.getString("DPurl");
+        mDesignation=args.getString("designation");
 
 
 
@@ -70,6 +70,8 @@ public class AccountSetupFragment extends Fragment {
         mPhNoEt = view.findViewById(R.id.phoneNo);
         mProceedNextButton = view.findViewById(R.id.done);
 
+        System.out.println(mName);
+
 
         mNameEt.setText(mName);
         mEmailEt.setText(mEmail);
@@ -77,11 +79,20 @@ public class AccountSetupFragment extends Fragment {
         mDesignationEt.setText(mDesignation);
         Picasso.get().load(mDpImageURL).transform(new CropCircleTransformation()).into(mImageViewIv);
 
+        mEmailEt.setEnabled(false);
+
 
         mImageViewIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //imageview Selection
+            }
+        });
+
+        mProceedNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
