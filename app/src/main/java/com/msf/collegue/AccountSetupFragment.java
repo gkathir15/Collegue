@@ -1,18 +1,34 @@
 package com.msf.collegue;
 
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mlsdev.rximagepicker.RxImagePicker;
+import com.mlsdev.rximagepicker.Sources;
+import com.msf.collegue.model.UserPojo;
 import com.squareup.picasso.Picasso;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 
@@ -33,6 +49,16 @@ public class AccountSetupFragment extends Fragment {
     EditText mDesignationEt;
     EditText mEmailEt;
     FloatingActionButton mProceedNextButton;
+    UserPojo user;
+    ProgressBar progressBar;
+    Uri localImageUri;
+
+    private StorageReference storageReference;
+    private DatabaseReference mDatabase;
+    private FirebaseDatabase firebaseDatabase;
+    Context context;
+
+
 
 
     @Override
@@ -62,6 +88,7 @@ public class AccountSetupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_account_setup, container, false);
+        context = getActivity();
 
         mNameEt = view.findViewById(R.id.Username);
         mEmailEt = view.findViewById(R.id.emailId);
@@ -69,8 +96,10 @@ public class AccountSetupFragment extends Fragment {
         mImageViewIv = view.findViewById(R.id.dp);
         mPhNoEt = view.findViewById(R.id.phoneNo);
         mProceedNextButton = view.findViewById(R.id.done);
+        progressBar= view.findViewById(R.id.progress);
 
         System.out.println(mName);
+        storageReference = FirebaseStorage.getInstance().getReference();
 
 
         mNameEt.setText(mName);
@@ -85,13 +114,21 @@ public class AccountSetupFragment extends Fragment {
         mImageViewIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //imageview Selection
+                getImage();
             }
         });
 
         mProceedNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                mDesignation = mDesignationEt.getText().toString();
+                mName = mNameEt.getText().toString();
+                mPhoneNo = mPhNoEt.getText().toString().trim();
+
+                user = new UserPojo(mName,mEmail,mPhoneNo,mDesignation,mDpImageURL);
+
+                WriteDataToDb();
 
             }
         });
@@ -100,5 +137,60 @@ public class AccountSetupFragment extends Fragment {
 
         return view;
     }
+
+
+    public boolean getImage()
+    {
+        RxImagePicker.with(context).requestImage(Sources.GALLERY).subscribe(new Consumer<Uri>() {
+            @Override
+            public void accept(@NonNull Uri uri) throws Exception {
+
+
+                progressBar.setIndeterminate(true);
+                progressBar.setVisibility(View.VISIBLE);
+                mProceedNextButton.setActivated(false);
+                mProceedNextButton.setEnabled(false);
+
+                Log.d("selected image",uri.toString());
+                localImageUri = uri;
+                Picasso.get().load(uri).transform(new CropCircleTransformation()).into(mImageViewIv);
+                //Get image by uri using one of image loading libraries. I use Glide in sample app.
+                // Create a storage reference from our app
+                 storageReference = storageReference.child("ProfileImages/"+mEmail+".jpg");
+                 storageReference.putFile(localImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                     @Override
+                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                         Toast.makeText(context,"Profile image updated",Toast.LENGTH_LONG).show();
+                         mDpImageURL = storageReference.getDownloadUrl().toString();
+                         System.out.println( storageReference.getBucket());
+                         System.out.println( storageReference.getPath());
+
+                         progressBar.setVisibility(View.GONE);
+                         mProceedNextButton.setActivated(true);
+                         mProceedNextButton.setEnabled(true);
+
+                     }
+                 });
+
+
+
+
+
+
+            }
+        });
+
+
+        return true;
+    }
+
+    public void WriteDataToDb(){
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mDatabase = firebaseDatabase.getReference("users");
+        mDatabase.setValue(user);
+    }
+
+
+
 
 }

@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="030203" />
-                            <entry key="outputName" value="ic_edit_black_24dp" />
-                            <entry key="sourceFile" value="C:\Users\guru" />
+                            <entry key="outputName" value="ic_reunion" />
+                            <entry key="sourceFile" value="C:\Downloads\reunion.svg" />
                           </map>
                         </option>
                       </PersistentState>
