@@ -3,11 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LoginFragment"
     android:background="#9e9e9e"
     android:id="@+id/login_frag">
 
     <!-- TODO: Update blank fragment layout -->
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bg"
+        android:scaleType="centerCrop"
+        />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
@@ -16,7 +25,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="104dp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:elevation="5dp" />
 
 
 

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,8 +27,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-
+import com.squareup.picasso.Picasso;
 
 
 /**
@@ -43,6 +43,7 @@ public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
     String TAG = "Login Fragment";
     MainActivity mainActivity;
+    ImageView imageView;
 
 
 
@@ -70,6 +71,8 @@ public class LoginFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         mGoogleSigninButton = view.findViewById(R.id.sign_in_button);
+        imageView = view.findViewById(R.id.bg);
+        Picasso.get().load(R.mipmap.desktop).into(imageView);
 
 
 

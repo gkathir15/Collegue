@@ -1,6 +1,9 @@
 package com.msf.collegue;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,9 +14,10 @@ import android.widget.Button;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.msf.collegue.constants.Constants;
 
 
-public class MainActivity extends AppCompatActivity implements
+public class MainActivity extends FragmentActivity implements
         FirebaseAuth.AuthStateListener {
 
 
@@ -26,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements
     AccountSetupFragment mAccountSetupFragment;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    ListUserFragment listUserFragment;
+    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onStart() {
@@ -42,26 +49,39 @@ public class MainActivity extends AppCompatActivity implements
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
        // ButterKnife.bind(this);
+        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
 
 
          fragmentManager = getSupportFragmentManager();
          fragmentTransaction = fragmentManager.beginTransaction();
 
-         if (firebaseAuth  == null)
+         if (user  == null)
          {
        mLoginFragment = new LoginFragment();
-        fragmentTransaction.add(R.id.root_layout, mLoginFragment).commitNow();}
+        fragmentTransaction.add(R.id.root_layout, mLoginFragment).commit();}
         else {
-             FirebaseUser user = firebaseAuth.getCurrentUser();
-             mAccountSetupFragment = new AccountSetupFragment();
-             Bundle b = new Bundle();
-             b.putString("name",user.getDisplayName());
-             b.putString("email",user.getEmail());
-             b.putString("DPurl", String.valueOf(user.getPhotoUrl()));
+             if (!sharedPreferences.getBoolean(Constants.IS_ACCOUNT_SETUP_DONE,false)) {
+                 // FirebaseUser user = firebaseAuth.getCurrentUser();
+                 mAccountSetupFragment = new AccountSetupFragment();
+                 Bundle b = new Bundle();
+                 b.putString("name", user.getDisplayName());
+                 b.putString("email", user.getEmail());
+                 b.putString("DPurl", String.valueOf(user.getPhotoUrl()));
 
-             mAccountSetupFragment.setArguments(b);
-             fragmentTransaction = fragmentManager.beginTransaction();
-             fragmentTransaction.add(R.id.root_layout,mAccountSetupFragment).addToBackStack(null).commitNow();
+                 mAccountSetupFragment.setArguments(b);
+                 //fragmentTransaction = fragmentManager.beginTransaction();
+                 fragmentTransaction.add(R.id.root_layout, mAccountSetupFragment).commit();
+             }
+             else {
+                    listUserFragment = new ListUserFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Email",user.getEmail());
+                    listUserFragment.setArguments(bundle);
+               //  fragmentTransaction = fragmentManager.beginTransaction();
+                 fragmentTransaction.add(R.id.root_layout, listUserFragment).commit();
+
+
+             }
          }
 
 
