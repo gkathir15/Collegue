@@ -1,8 +1,20 @@
 package com.msf.collegue.model;
 
-public class UserPojo {
+import java.io.Serializable;
+
+public class UserPojo implements Serializable {
 
    private String Name,Email,Mobile,Designation,PhotoUrl;
+
+   private String Id;
+
+    public String getId() {
+        return Id;
+    }
+
+    public void setId(String id) {
+        Id = id;
+    }
 
     public String getName() {
         return Name;
@@ -44,12 +56,12 @@ public class UserPojo {
         PhotoUrl = photoUrl;
     }
 
-    public UserPojo(String name, String email, String mobile, String designation, String photoUrl) {
-
+    public UserPojo(String name, String email, String mobile, String designation, String photoUrl, String id) {
         Name = name;
         Email = email;
         Mobile = mobile;
         Designation = designation;
         PhotoUrl = photoUrl;
+        Id = id;
     }
 }

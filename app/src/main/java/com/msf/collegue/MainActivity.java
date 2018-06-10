@@ -25,6 +25,11 @@ public class MainActivity extends FragmentActivity implements
     Button getFcmToken;
     private FirebaseAnalytics mFirebaseAnalytics;
     LoginFragment mLoginFragment;
+
+    public FirebaseUser getmHomeuser() {
+        return mHomeuser;
+    }
+
     FirebaseUser mHomeuser ;
     FirebaseAuth firebaseAuth;
     AccountSetupFragment mAccountSetupFragment;
@@ -49,7 +54,7 @@ public class MainActivity extends FragmentActivity implements
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
        // ButterKnife.bind(this);
-        sharedPreferences = this.getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = this.getSharedPreferences(Constants.sharedPerfName,Context.MODE_PRIVATE);
 
 
          fragmentManager = getSupportFragmentManager();
@@ -102,6 +107,7 @@ public class MainActivity extends FragmentActivity implements
             b.putString("name",user.getDisplayName());
             b.putString("email",user.getEmail());
             b.putString("DPurl", String.valueOf(user.getPhotoUrl()));
+            b.putString("Id",user.getUid());
 
             mAccountSetupFragment.setArguments(b);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

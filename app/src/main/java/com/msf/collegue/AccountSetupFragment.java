@@ -63,6 +63,7 @@ public class AccountSetupFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     Context context;
     ListUserFragment listUserFragment;
+    MainActivity activity;
 
 
 
@@ -86,8 +87,11 @@ public class AccountSetupFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        activity = (MainActivity) getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,6 +107,8 @@ public class AccountSetupFragment extends Fragment {
         mPhNoEt = view.findViewById(R.id.phoneNo);
         mProceedNextButton = view.findViewById(R.id.done);
         progressBar= view.findViewById(R.id.progress);
+
+        toolbar.setTitle("Profile");
 
         System.out.println(mName);
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -132,7 +138,7 @@ public class AccountSetupFragment extends Fragment {
                 mName = mNameEt.getText().toString();
                 mPhoneNo = mPhNoEt.getText().toString().trim();
 
-                user = new UserPojo(mName,mEmail,mPhoneNo,mDesignation,mDpImageURL);
+                user = new UserPojo(mName,mEmail,mPhoneNo,mDesignation,mDpImageURL,activity.getmHomeuser().getUid());
 
                 WriteDataToDb();
                 sharedPreferences = context.getSharedPreferences(Constants.sharedPerfName,Context.MODE_PRIVATE);
@@ -143,7 +149,7 @@ public class AccountSetupFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("Email",mEmail);
                 listUserFragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.root_layout,listUserFragment).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.root_layout,listUserFragment).commit();
 
 
             }
@@ -210,7 +216,8 @@ public class AccountSetupFragment extends Fragment {
     public void WriteDataToDb(){
         firebaseDatabase = FirebaseDatabase.getInstance();
         mDatabase = firebaseDatabase.getReference(Constants.userData);
-        mDatabase.setValue(user);
+        mDatabase.child(user.getId()).setValue(user);
+        //mDatabase.setValue(user);
     }
 
 
