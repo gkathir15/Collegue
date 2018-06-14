@@ -2,6 +2,7 @@ package com.msf.collegue;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -45,12 +46,14 @@ public class AccountSetupFragment extends Fragment {
     String mPhoneNo;
     String mDpImageURL;
     String mDesignation;
+    String mTeam;
 
     ImageView mImageViewIv;
     EditText mNameEt;
     EditText mPhNoEt;
     EditText mDesignationEt;
     EditText mEmailEt;
+    EditText mTeamEt;
     Toolbar toolbar;
     FloatingActionButton mProceedNextButton;
     UserPojo user;
@@ -105,6 +108,7 @@ public class AccountSetupFragment extends Fragment {
         mDesignationEt = view.findViewById(R.id.Designation);
         mImageViewIv = view.findViewById(R.id.dp);
         mPhNoEt = view.findViewById(R.id.phoneNo);
+        mTeamEt = view.findViewById(R.id.Team);
         mProceedNextButton = view.findViewById(R.id.done);
         progressBar= view.findViewById(R.id.progress);
 
@@ -137,8 +141,8 @@ public class AccountSetupFragment extends Fragment {
                 mDesignation = mDesignationEt.getText().toString();
                 mName = mNameEt.getText().toString();
                 mPhoneNo = mPhNoEt.getText().toString().trim();
-
-                user = new UserPojo(mName,mEmail,mPhoneNo,mDesignation,mDpImageURL,activity.getmHomeuser().getUid());
+                mTeam = mTeamEt.getText().toString();
+                user = new UserPojo(mName,mEmail,mPhoneNo,mDesignation,mDpImageURL,activity.getmHomeuser().getUid(),mTeam);
 
                 WriteDataToDb();
                 sharedPreferences = context.getSharedPreferences(Constants.sharedPerfName,Context.MODE_PRIVATE);
@@ -149,8 +153,12 @@ public class AccountSetupFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("Email",mEmail);
                 listUserFragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.root_layout,listUserFragment).commit();
-
+                // getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.root_layout,listUserFragment).commit();
+                activity.fragmentManager.popBackStack();
+                Intent i = new Intent(activity,HomeActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                activity.finish();
 
             }
         });

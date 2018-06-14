@@ -7,6 +7,30 @@ public class UserPojo implements Serializable {
    private String Name,Email,Mobile,Designation,PhotoUrl;
 
    private String Id;
+    private String Team;
+
+    public String getTeam() {
+        return Team;
+    }
+
+    public void setTeam(String team) {
+        Team = team;
+    }
+
+    public UserPojo(String name, String email, String mobile, String designation, String photoUrl, String id, String team) {
+
+        Name = name;
+        Email = email;
+        Mobile = mobile;
+        Designation = designation;
+        PhotoUrl = photoUrl;
+        Id = id;
+        Team = team;
+    }
+
+    public UserPojo() {
+
+    }
 
     public String getId() {
         return Id;
